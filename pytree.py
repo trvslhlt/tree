@@ -53,13 +53,13 @@ def buildTree(rootDirectory):
             if name.startswith('.'):
                 continue
             namepath = os.path.join(directory, name)
-            hatPipe = '|'
+            hatPipe = '├'
             if idx ==  len(names) - 1:
-                hatPipe = '`'
-            tree = tree + '\n' + lineHead +  hatPipe + '-- ' + name
+                hatPipe = '└'
+            tree = tree + '\n' + lineHead +  hatPipe + '── ' + name
             if os.path.isdir(namepath):
                 directoryCount[0] += 1
-                descender = "    " if idx == (len(names) - 1) else "|   "
+                descender = "    " if idx == (len(names) - 1) else "│   "
                 tree = internalBuildTree(namepath, level + 1, lineHead + descender, tree)
             else:
                 fileCount[0] += 1
