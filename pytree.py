@@ -47,16 +47,19 @@ def buildTree(rootDirectory):
             if name.startswith('.'):
                 continue
             namepath = os.path.join(directory, name)
-            hatPipe = 'f'
+            hatPipe = '|'
             if idx ==  len(names) - 1:
-                hatPipe = 'L'
+                hatPipe = '`'
             tree =  tree + '\n' + lineHead +  hatPipe + '-- ' + name
             if os.path.isdir(namepath):
-                descender = "   " if idx == (len(names) - 1) else "|  "
+                descender = "    " if idx == (len(names) - 1) else "|   "
                 tree = internalBuildTree(namepath, level + 1, lineHead + descender, tree)
         return tree
-   
-    tree = internalBuildTree(rootDirectory, 0, '', '.') 
+  
+    firstLine = '.'
+    if len(sys.argv) is 2:
+        firstLine = sys.argv[1]
+    tree = internalBuildTree(rootDirectory, 0, '', firstLine) 
     return tree
     
 
@@ -67,9 +70,10 @@ def run():
     validateInputs()
     rootDirectory = findTreeRoot()
     tree = buildTree(rootDirectory)
-    print(tree)
+    sys.stdout.buffer.write(tree.encode('utf-8'))
+    print()
+    print()
+
 
 if __name__ == '__main__':
-    # just for demo
-    #subprocess.run(['tree'] + sys.argv[1:])
     run() 
