@@ -14,7 +14,7 @@ def validateInputs():
     '''
     inputCount = len(sys.argv)
     if inputCount == 1:
-        return # no argument passed
+        return
     elif inputCount == 2:
         currentDirectoryPath = os.path.dirname(os.path.abspath(__file__))
         argumentPath = os.path.join(currentDirectoryPath, sys.argv[1])
@@ -41,10 +41,8 @@ def findTreeRoot():
 
 
 def buildTree(rootDirectory):
-    
     directoryCount = [0]
     fileCount = [0]
- 
     def internalBuildTree(directory, level, lineHead, tree):
         names = os.listdir(directory)
         names = alphnumSort(names)
@@ -54,7 +52,7 @@ def buildTree(rootDirectory):
                 continue
             namepath = os.path.join(directory, name)
             hatPipe = '├'
-            if idx ==  len(names) - 1:
+            if idx == len(names) - 1:
                 hatPipe = '└'
             tree = tree + '\n' + lineHead +  hatPipe + '── ' + name
             if os.path.isdir(namepath):
@@ -64,23 +62,23 @@ def buildTree(rootDirectory):
             else:
                 fileCount[0] += 1
         return tree
-  
     firstLine = '.'
     if len(sys.argv) is 2:
         firstLine = sys.argv[1]
     tree = internalBuildTree(rootDirectory, 0, '', firstLine)
-    report = str(directoryCount[0]) + ' directories, ' +  str(fileCount[0]) + ' files'
+    report = str(directoryCount[0]) + ' directories, ' + str(fileCount[0]) + ' files'
     return tree, report
 
-    
+
 def alphnumSort(l):
     def alphCmp(e1, e2):
-        e1_cp = e1
-        e2_cp = e2
-        while len(e1)is not 0 and not e1_cp[0].isalnum():
-            e1_cp = e1_cp[1:]
-        while len(e2)is not 0 and not e2_cp[0].isalnum():
-            e2_cp = e2_cp[1:]
+        def trimNonalpnumFromHead(e):
+            e_cp = e
+            while len(e)is not 0 and not e_cp[0].isalnum():
+                e_cp = e_cp[1:]
+            return e_cp
+        e1_cp = trimNonalpnumFromHead(e1)
+        e2_cp = trimNonalpnumFromHead(e2)
         return -1 if e1_cp.lower() < e2_cp.lower() else 1
     return sorted(l, key=functools.cmp_to_key(alphCmp))
 
@@ -98,4 +96,4 @@ def run():
 
 
 if __name__ == '__main__':
-    run() 
+    run()
