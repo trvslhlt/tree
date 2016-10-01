@@ -55,7 +55,7 @@ def buildTree(rootDirectory):
             hatPipe = '├'
             if idx == len(names) - 1:
                 hatPipe = '└'
-            tree = tree + '\n'+ lineHead +  hatPipe + '── ' + name
+            tree = tree + '\n' + lineHead + hatPipe + '── ' + name
             if os.path.isdir(namepath):
                 directoryCount[0] += 1
                 descender = "    " if idx == (len(names) - 1) else "│   "
