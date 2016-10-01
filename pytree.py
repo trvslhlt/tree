@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import functools
 import os
 import subprocess
 import sys
@@ -46,6 +47,8 @@ def buildTree(rootDirectory):
  
     def internalBuildTree(directory, level, lineHead, tree):
         names = os.listdir(directory)
+        names = alphnumSort(names)
+        names = list(filter(lambda x: x[0] is not '.', names))
         for idx, name in enumerate(names):
             if name.startswith('.'):
                 continue
@@ -53,7 +56,7 @@ def buildTree(rootDirectory):
             hatPipe = '|'
             if idx ==  len(names) - 1:
                 hatPipe = '`'
-            tree =  tree + '\n' + lineHead +  hatPipe + '-- ' + name
+            tree = tree + '\n' + lineHead +  hatPipe + '-- ' + name
             if os.path.isdir(namepath):
                 directoryCount[0] += 1
                 descender = "    " if idx == (len(names) - 1) else "|   "
@@ -68,7 +71,19 @@ def buildTree(rootDirectory):
     tree = internalBuildTree(rootDirectory, 0, '', firstLine)
     report = str(directoryCount[0]) + ' directories, ' +  str(fileCount[0]) + ' files'
     return tree, report
+
     
+def alphnumSort(l):
+    def alphCmp(e1, e2):
+        e1_cp = e1
+        e2_cp = e2
+        while len(e1)is not 0 and not e1_cp[0].isalnum():
+            e1_cp = e1_cp[1:]
+        while len(e2)is not 0 and not e2_cp[0].isalnum():
+            e2_cp = e2_cp[1:]
+        return -1 if e1_cp.lower() < e2_cp.lower() else 1
+    return sorted(l, key=functools.cmp_to_key(alphCmp))
+
 
 def run():
     '''
