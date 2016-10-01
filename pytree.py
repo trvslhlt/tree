@@ -41,6 +41,9 @@ def findTreeRoot():
 
 def buildTree(rootDirectory):
     
+    directoryCount = [0]
+    fileCount = [0]
+ 
     def internalBuildTree(directory, level, lineHead, tree):
         names = os.listdir(directory)
         for idx, name in enumerate(names):
@@ -52,15 +55,19 @@ def buildTree(rootDirectory):
                 hatPipe = '`'
             tree =  tree + '\n' + lineHead +  hatPipe + '-- ' + name
             if os.path.isdir(namepath):
+                directoryCount[0] += 1
                 descender = "    " if idx == (len(names) - 1) else "|   "
                 tree = internalBuildTree(namepath, level + 1, lineHead + descender, tree)
+            else:
+                fileCount[0] += 1
         return tree
   
     firstLine = '.'
     if len(sys.argv) is 2:
         firstLine = sys.argv[1]
-    tree = internalBuildTree(rootDirectory, 0, '', firstLine) 
-    return tree
+    tree = internalBuildTree(rootDirectory, 0, '', firstLine)
+    report = str(directoryCount[0]) + ' directories, ' +  str(fileCount[0]) + ' files'
+    return tree, report
     
 
 def run():
@@ -69,10 +76,10 @@ def run():
     '''
     validateInputs()
     rootDirectory = findTreeRoot()
-    tree = buildTree(rootDirectory)
+    tree, report = buildTree(rootDirectory)
     sys.stdout.buffer.write(tree.encode('utf-8'))
-    print()
-    print()
+    print('\n')
+    print(report)
 
 
 if __name__ == '__main__':
