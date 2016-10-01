@@ -43,6 +43,7 @@ def findTreeRoot():
 def buildTree(rootDirectory):
     directoryCount = [0]
     fileCount = [0]
+
     def internalBuildTree(directory, level, lineHead, tree):
         names = os.listdir(directory)
         names = alphnumSort(names)
@@ -54,7 +55,7 @@ def buildTree(rootDirectory):
             hatPipe = '├'
             if idx == len(names) - 1:
                 hatPipe = '└'
-            tree = tree + '\n' + lineHead +  hatPipe + '── ' + name
+            tree = tree + '\n'+ lineHead +  hatPipe + '── ' + name
             if os.path.isdir(namepath):
                 directoryCount[0] += 1
                 descender = "    " if idx == (len(names) - 1) else "│   "
@@ -71,7 +72,9 @@ def buildTree(rootDirectory):
 
 
 def alphnumSort(l):
+
     def alphCmp(e1, e2):
+
         def trimNonalpnumFromHead(e):
             e_cp = e
             while len(e)is not 0 and not e_cp[0].isalnum():
